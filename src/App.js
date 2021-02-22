@@ -1,24 +1,39 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import { Container, Row, Col, Button } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
-function App() {
+import Axios from "axios";
+import MyCard from './Component/Card';
+
+const App = () => {
+
+  const [receive, setReceive] = useState({});
+
+
+  const fetchDetails = async() => {
+    const {data} = await  Axios.get('https://randomuser.me/api/')
+
+    const receive = data.results[0];
+    setReceive(receive);
+    console.log(receive);
+  }
+  // offset-md-4 mt-4 size
+  useEffect(() => {
+    fetchDetails();
+  },[]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Container fluid>
+        <Row>
+          <Col  md={4} className="crush" >
+          <div className="simple">
+              <Button className="button" onClick={() => fetchDetails()}>New User</Button>
+          </div>
+              <MyCard receive={receive} />
+          </Col>
+        </Row>
+      </Container>
   );
 }
 
